@@ -1,8 +1,8 @@
 //
 //  SceneDelegate.swift
-//  View Pager
+//  API Master
 //
-//  Created by Sagaya Navis Vijay on 27/08/20.
+//  Created by TPFLAP146 on 03/05/20.
 //  Copyright © 2020 vijay. All rights reserved.
 //
 
