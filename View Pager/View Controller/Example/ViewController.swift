@@ -15,6 +15,12 @@ class ViewController: SlidingViewPagerController {
         super.viewDidLoad()
         initialSetup()
     }
+    
+    override func bindingViewController() {
+        super.bindingViewController()
+        //Override this
+        
+    }
 
 }
 
@@ -39,6 +45,7 @@ extension ViewController {
         setHeaderInActiveColor(color: .green)
         setHeaderActiveColor(color: .blue)
         setHeaderBackgroundColor(color: .white)
+        
         bindingViewController()
         
     }

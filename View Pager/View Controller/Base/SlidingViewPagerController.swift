@@ -108,7 +108,7 @@ extension SlidingViewPagerController {
         items.append(item)
         titles.append(title)
     }
-    func bindingViewController(){
+    @objc func bindingViewController(){
         view.addSubview(collectionHeader)
         view.addSubview(collectionPage)
         collectionHeaderSetup()
