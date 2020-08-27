@@ -18,19 +18,24 @@ enum ViewPagerStyle: String {
 //MARK: - View Controller - Initialisation
 class SlidingViewPagerController: UIViewController {
     
+    
     //Variables
-    private let collectionHeader = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
-    private let collectionPage = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
-    private let collectionHeaderIdentifier = "COLLECTION_HEADER_IDENTIFIER"
-    private let collectionPageIdentifier = "COLLECTION_PAGE_IDENTIFIER"
+    private let heightHeader = 60
+    private var currentPosition = 0
+    
+    //Variables - Configuration
     private var items = [UIViewController]()
     private var titles = [String]()
     private var colorHeaderActive = UIColor.blue
     private var colorHeaderInActive = UIColor.gray
     private var colorHeaderBackground = UIColor.white
-    private var currentPosition = 0
     private var tabStyle = ViewPagerStyle.fixed
-    private let heightHeader = 57
+    
+    //Variables - Collection View
+    private let collectionHeader = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+    private let collectionPage = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+    private let collectionHeaderIdentifier = "COLLECTION_HEADER"
+    private let collectionPageIdentifier = "COLLECTION_PAGE"
     
     //Variable - Header Cell
     private class HeaderCell: UICollectionViewCell {
@@ -70,18 +75,26 @@ class SlidingViewPagerController: UIViewController {
             self.addSubview(label)
             self.addSubview(indicator)
             
-            // label
+            initialLabelSetup()
+            initialIndicatorSetup()
+            
+        }
+        private func initialLabelSetup() {
+            
             label.translatesAutoresizingMaskIntoConstraints = false
             label.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
             label.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
             label.font = UIFont.boldSystemFont(ofSize: 18)
             
-            // indicator
+        }
+        private func initialIndicatorSetup() {
+            
             indicator.translatesAutoresizingMaskIntoConstraints = false
             indicator.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
             indicator.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
             indicator.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
             indicator.heightAnchor.constraint(equalToConstant: 2).isActive = true
+            
         }
         
     }
@@ -91,12 +104,18 @@ class SlidingViewPagerController: UIViewController {
 //MARK: - Operations
 extension SlidingViewPagerController {
     
-    func build(){
-        // view
+    func addItem(item: UIViewController, title: String){
+        items.append(item)
+        titles.append(title)
+    }
+    func bindingViewController(){
         view.addSubview(collectionHeader)
         view.addSubview(collectionPage)
+        collectionHeaderSetup()
+        collectionPageSetup()
+    }
+    func collectionHeaderSetup() {
         
-        // collectionHeader
         collectionHeader.translatesAutoresizingMaskIntoConstraints = false
         collectionHeader.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         collectionHeader.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -110,7 +129,9 @@ extension SlidingViewPagerController {
         collectionHeader.dataSource = self
         collectionHeader.reloadData()
         
-        // collectionPage
+    }
+    func collectionPageSetup() {
+        
         collectionPage.translatesAutoresizingMaskIntoConstraints = false
         collectionPage.topAnchor.constraint(equalTo: collectionHeader.bottomAnchor).isActive = true
         collectionPage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -126,10 +147,7 @@ extension SlidingViewPagerController {
         collectionPage.reloadData()
         
     }
-    func addItem(item: UIViewController, title: String){
-        items.append(item)
-        titles.append(title)
-    }
+    
     
 }
 
@@ -139,16 +157,14 @@ extension SlidingViewPagerController {
     func setHeaderBackgroundColor(color: UIColor){
         colorHeaderBackground = color
     }
-    
     func setHeaderActiveColor(color: UIColor){
         colorHeaderActive = color
     }
-    
     func setHeaderInActiveColor(color: UIColor){
         colorHeaderInActive = color
     }
-    
     func setCurrentPosition(position: Int){
+        
         currentPosition = position
         let path = IndexPath(item: currentPosition, section: 0)
         
@@ -163,8 +179,8 @@ extension SlidingViewPagerController {
         DispatchQueue.main.async {
            self.collectionPage.scrollToItem(at: path, at: .centeredHorizontally, animated: true)
         }
+        
     }
-    
     func setStyle(style: ViewPagerStyle){
         tabStyle = style
     }
@@ -197,6 +213,7 @@ extension SlidingViewPagerController: UICollectionViewDataSource{
         return items.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         if collectionView == collectionHeader {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionHeaderIdentifier, for: indexPath) as! HeaderCell
             cell.text = titles[indexPath.row]
@@ -217,6 +234,7 @@ extension SlidingViewPagerController: UICollectionViewDataSource{
         
         cell.addSubview(vc.view)
         
+        //View Constraints
         vc.view.translatesAutoresizingMaskIntoConstraints = false
         vc.view.topAnchor.constraint(equalTo: cell.topAnchor, constant: 28).isActive = true
         vc.view.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true

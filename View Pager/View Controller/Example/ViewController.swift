@@ -35,10 +35,11 @@ extension ViewController {
 
         addItem(item: testVCOne, title: "One")
         addItem(item: testVCTwo, title: "Two")
-        setHeaderActiveColor(color: .white)
-        setHeaderActiveColor(color: .lightText)
-        setHeaderBackgroundColor(color: .orange)
-        build()
+        
+        setHeaderInActiveColor(color: .green)
+        setHeaderActiveColor(color: .blue)
+        setHeaderBackgroundColor(color: .white)
+        bindingViewController()
         
     }
     
